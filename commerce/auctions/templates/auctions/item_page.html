@@ -1,0 +1,61 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+{% block body %}
+    <h2>{{ item.title }}</h2>
+    <p>Date listed : {{ item.listing_date }}
+        <br>
+        Listed by : <em>{{ item.created_by }}</em>
+        {% if user.is_authenticated %}
+    <a class="btn-floating waves-effect waves-light red" href="{% url 'add_to_wishlist' item.idx %}"><i class="material-icons">add</i></a>
+    {% endif %}
+    <br> 
+ 
+	    
+	    <ul>
+    		<img class="materialboxed" width="70%" src="{{ item.thumbnail.url|default_if_none:'#' }}">
+            
+    		<br>
+    		<li style="font-size: 20px"><strong>Minimum bid</strong> : <em>Rs.{{ item.price }}</em></li><br>
+            </p>
+            
+    {% if user.is_authenticated %}
+         
+          
+    <form method="POST" enctype='multipart/form-data'>
+        {% csrf_token %}
+        {{form.as_p}}
+        
+        <button class="btn waves-effect waves-light" type="submit" name="action">Bid!<i class="material-icons right">send</i></button>
+    </form> 
+     
+    {% endif %}
+
+    <br>
+            <li>There are {{ number_bids }} bids on this item.</li>
+            <li>Leading Bid: {{ max_bid }} by {{ max_bid_user }}</li>
+    		<h3>Details:</h3>
+    		<li>{{ item.summary }}</li>	
+
+		</ul>
+		<br>
+		<br>
+    <h3>Comments</h3>
+    {% for comment in comments %}
+    <p><strong>{{ comment.user }}</strong> : {{ comment.comment }}</p>
+    {% empty %}
+	<h6>No comments!</h6>
+    {% endfor %}
+
+	{% if user.is_authenticated %}
+         
+          
+    <form method="POST" enctype='multipart/form-data'>
+        {% csrf_token %}
+        {{comment_form.as_p}}
+        
+        <button class="btn waves-effect waves-light" type="submit" name="action">Comment!<i class="material-icons right">send</i></button>
+    </form> 
+     
+    {% endif %}
+
+{% endblock %}

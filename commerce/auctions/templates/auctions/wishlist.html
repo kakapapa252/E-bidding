@@ -1,0 +1,34 @@
+
+
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+        <h2>WatchList</h2>
+        
+        <div class="row">
+        {% for listing,date in items %}
+        <div class="col s12 m6">
+          <div class="card">
+            <div class="card-image">
+              <img src="{{ listing.thumbnail.url|default_if_none:'#' }}">
+              <span class="card-title activator red-text text-darken-4"><strong>{{ listing.title }}</strong></span>
+
+            </div>
+
+            <div class="card-content">
+              <p>Minimum Bid : Rs.{{ listing.price }}<br>Date Added to watchlist : {{ date }}<br>Put Up by : <em>{{ listing.created_by }}</em></p>
+            </div>
+            <div class="card-action">
+              <a href="{% url 'item_page' listing.idx %}">View Product</a>
+              <a href="{% url 'remove_from_wishlist' listing.idx %}">Remove from Watchlist</a>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <br>
+        <h4 style="color: pink"><em>No listings in wishlist!</em></h4>
+        {% endfor %}
+      </div>
+
+
+{% endblock %}

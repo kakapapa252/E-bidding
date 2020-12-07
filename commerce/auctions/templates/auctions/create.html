@@ -1,0 +1,19 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    {% if user.is_authenticated %}
+    <form method="POST" enctype='multipart/form-data'>
+        {% csrf_token %}
+        {{form.as_p}}
+        <br>
+        <button class="btn waves-effect waves-light" type="submit" name="action">Create!<i class="material-icons right">send</i></button>
+    </form>
+    {% else %}
+        You are Not Logged In
+        <p>Please <a href="{% url 'login' %}">Login</a> in order to create a listing!<br>If not a user,<a href="{% url 'register' %}">Register</a> now!</p>
+
+    {% endif %}
+
+{% endblock %}
+
