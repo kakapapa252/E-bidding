@@ -16,7 +16,12 @@
         </div>
         <div class="card-action">
           <a href="{% url 'item_page' listing.idx %}">View</a>
-          <a href="{% url 'remove_from_created' listing.idx %}">Remove from Shop</a>
+          {% if listing.active %}
+          <a href="{% url 'deactive' listing.idx %}">Deactivate</a>
+          {% endif %}
+          {% if not listing.active %}
+          <span>Closed</span> 
+          {% endif %}
         </div>
       </div>
     </div>

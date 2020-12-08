@@ -31,6 +31,9 @@
                 <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
             </li>
   <a class="btn dropdown-trigger" href="#!" data-target="dropdown2">Categories<i class="material-icons right">arrow_drop_down</i></a>
+  <li class="nav-item">
+                <a class="nav-link" href="{% url 'deactive_listing_view' %}">Won Listings</a>
+            </li>
             
             
             {% if user.is_authenticated %}

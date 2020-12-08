@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render,  get_object_or_404
 from django.urls import reverse
-
+from django.db.models import Max
 from .models import *
 
 from .forms import CreateForm, BidForm, CommentForm
@@ -14,7 +14,7 @@ from django.contrib import messages
 
 
 def index(request):
-    listings = Listing.objects.all().order_by("-listing_date")
+    listings = Listing.objects.all().order_by("-listing_date").filter(active = True)
     return render(request, "auctions/index.html", context={"listings":listings})
 
 
@@ -206,3 +206,28 @@ def add_to_wishlist(request,idx):
 def category(request, cat):
     listings =  Listing.objects.filter(category = cat)
     return render(request,"auctions/category.html", context={"listings":listings, "cat": cat})
+
+
+def deactive_listing_view(request):
+    
+    biddings = BiddingList.objects.select_related('item')
+    listings = biddings.values("item").annotate(Max('bid')).order_by().filter(user=request.user)
+    #listings = Listing.objects.in_bulk(new_list, field_name='idx')
+    #listings = Listing.objects.all().order_by("-listing_date").filter(active = False)
+    print(biddings)
+    print(listings)
+
+
+    return render(request, "auctions/deactivate_list_view.html", context={"listings":listings})
+
+def deactive(request, idx):
+    try:
+        user = request.user
+        created_item =  Listing.objects.get(idx=idx, created_by =user,)
+        
+        created_item.active = False
+        created_item.save()
+        return HttpResponseRedirect(reverse("my_created"))
+    except:
+
+        return HttpResponseRedirect(reverse("my_created"))

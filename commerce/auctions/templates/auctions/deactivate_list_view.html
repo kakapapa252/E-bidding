@@ -1,0 +1,27 @@
+{% extends "auctions/layout.html" %}
+
+{% load static %}
+{% block body %}
+    <h2>Won Listings</h2>
+    <div class="row">
+  	{% for listing in listings %}
+    <div class="col s12 m4">
+      <div class="card">
+        <div class="card-image">
+          <img src="{{ listing.item.thumbnail.url|default_if_none:'#' }}">
+          <span class="card-title activator red-text text-darken-4"><strong>{{ listing.item.title }}</strong></span>
+
+        </div>
+
+        
+        <div class="card-action">
+        </div>
+      </div>
+    </div>
+    {% empty %}
+	<h1>No deactive listings!</h1>
+    {% endfor %}
+  </div>
+	
+
+{% endblock %}
